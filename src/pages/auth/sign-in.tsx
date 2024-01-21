@@ -2,8 +2,27 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@radix-ui/react-label'
 import { Helmet } from 'react-helmet-async'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+
+const signInForm = z.object({
+  email: z.string().email(),
+})
+
+type signInForm = z.infer<typeof signInForm>
 
 export function SignIn() {
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<signInForm>()
+
+  async function handleSignIn(data: signInForm) {
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    console.log(data)
+  }
+
   return (
     <>
       <Helmet title="login" />
@@ -18,13 +37,13 @@ export function SignIn() {
             </p>
           </div>
 
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit(handleSignIn)}>
             <div className="space-y-2">
               <Label>Seu e-mail</Label>
-              <Input id="email" type="email" />
+              <Input id="email" type="email" {...register('email')} />
             </div>
 
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
               Acessar painel
             </Button>
           </form>
