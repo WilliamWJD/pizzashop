@@ -10,11 +10,17 @@ import {
 } from './ui/dropdown-menu'
 import { useQuery } from '@tanstack/react-query'
 import { getProfile } from '@/api/get-profile'
+import { getManagerRestaurant } from '@/api/get-manager-restaurant'
 
 export function AccountMenu() {
   const { data: profile } = useQuery({
     queryKey: ['profile'],
     queryFn: getProfile,
+  })
+
+  const { data: managedRestaurant } = useQuery({
+    queryKey: ['managed-restaurant'],
+    queryFn: getManagerRestaurant,
   })
 
   return (
@@ -24,7 +30,7 @@ export function AccountMenu() {
           variant="outline"
           className="flex items-center gap-2 select-none"
         >
-          {profile?.name}
+          {managedRestaurant?.name}
           <ChevronDown className="w-4 h-4" />
         </Button>
       </DropdownMenuTrigger>
